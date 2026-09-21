@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>InternalWebServer</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <main class="container">
+    <h1>InternalWebServer</h1>
+    <p class="subtitle">Local development server is running.</p>
+
+    <section class="card">
+      <h2>Server info</h2>
+      <dl id="info">
+        <dt>Status</dt><dd id="status">Loading…</dd>
+      </dl>
+      <button id="refresh" type="button">Refresh</button>
+    </section>
+  </main>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
