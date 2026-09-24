@@ -1,6 +1,10 @@
 # InternalWebServer
 
-Internal web server built with Python + Flask, with a plain HTML/CSS/JavaScript front end.
+An internal resource hub: a searchable page of the team's links and tools, built with
+Python + Flask and a plain HTML/CSS/JavaScript front end.
+
+Content comes from a single file, [`data/links.json`](data/links.json), so updating the
+page means editing JSON and refreshing the browser. No database, no restart.
 
 ## Quick start (Windows PowerShell)
 
@@ -8,31 +12,70 @@ Internal web server built with Python + Flask, with a plain HTML/CSS/JavaScript 
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
+copy .env.example .env
 python app.py
 ```
 
 Then open http://127.0.0.1:8080
 
+## Editing the page content
+
+Each entry in `data/links.json` looks like this:
+
+```json
+{
+  "name": "Development",
+  "links": [
+    {
+      "title": "Source control",
+      "url": "https://github.com/xel0irg/InternalWebServer",
+      "description": "This project's repository.",
+      "tags": ["git", "code", "repo"]
+    }
+  ]
+}
+```
+
+`title` and `url` are required; `description` and `tags` are optional. Tags are
+searchable, so they are worth filling in. If the file has a mistake in it, the page
+shows what is wrong instead of crashing.
+
 ## Endpoints
 
-| Route         | Purpose                          |
-|---------------|----------------------------------|
-| `/`           | Home page                        |
-| `/health`     | Health check (JSON)              |
-| `/api/info`   | Server info (JSON), used by the page |
+| Route         | Purpose                              |
+|---------------|--------------------------------------|
+| `/`           | The resource hub page                |
+| `/api/links`  | The catalogue as JSON                |
+| `/health`     | Health check (JSON)                  |
+| `/api/info`   | Server info (JSON)                   |
 
 ## Configuration
 
-Copy `.env.example` to `.env` and adjust. Settings:
+Copy `.env.example` to `.env` and adjust:
 
-- `HOST`: bind address (default `127.0.0.1`, local only)
+- `HOST`: bind address (default `127.0.0.1`, reachable only from this machine)
 - `PORT`: port (default `8080`)
-- `FLASK_DEBUG`: `1` for auto-reload and debugger (never in production)
+- `FLASK_DEBUG`: `1` for auto-reload and the debugger (never in production)
+
+To let others on the network reach the server, set `HOST=0.0.0.0`, turn `FLASK_DEBUG`
+off, and serve it behind a production server such as Waitress rather than Flask's
+built-in development server.
 
 ## Tests
 
 ```powershell
 python -m pytest
+```
+
+## Project layout
+
+```
+app.py              Flask routes and entry point
+links.py            Loads and validates data/links.json
+data/links.json     The link catalogue (edit this)
+templates/          index.html (the hub), error.html (config problems)
+static/css, static/js   Styling and the client-side search
+tests/              pytest suite
 ```
 
 ## Workflow

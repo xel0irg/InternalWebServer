@@ -7,6 +7,8 @@ from datetime import datetime, timezone
 from dotenv import load_dotenv
 from flask import Flask, jsonify, render_template
 
+from links import LinkDataError, count_links, load_links
+
 load_dotenv()
 
 START_TIME = datetime.now(timezone.utc)
@@ -17,7 +19,22 @@ def create_app():
 
     @app.get("/")
     def index():
-        return render_template("index.html")
+        try:
+            catalogue = load_links()
+        except LinkDataError as exc:
+            return render_template("error.html", message=str(exc)), 500
+        return render_template(
+            "index.html",
+            catalogue=catalogue,
+            total=count_links(catalogue),
+        )
+
+    @app.get("/api/links")
+    def api_links():
+        try:
+            return jsonify(load_links())
+        except LinkDataError as exc:
+            return jsonify(error=str(exc)), 500
 
     @app.get("/health")
     def health():

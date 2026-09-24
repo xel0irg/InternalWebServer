@@ -1,0 +1,45 @@
+{
+  "title": "Internal Resource Hub",
+  "subtitle": "Tools, dashboards and docs used by the team.",
+  "categories": [
+    {
+      "name": "Development",
+      "links": [
+        {
+          "title": "Source control",
+          "url": "https://github.com/xel0irg/InternalWebServer",
+          "description": "This project's repository.",
+          "tags": ["git", "code", "repo"]
+        },
+        {
+          "title": "Local dev server",
+          "url": "http://127.0.0.1:8080/health",
+          "description": "Health check for this server.",
+          "tags": ["status", "health"]
+        }
+      ]
+    },
+    {
+      "name": "Operations",
+      "links": [
+        {
+          "title": "Example monitoring",
+          "url": "https://example.com/monitoring",
+          "description": "Replace with your real monitoring dashboard.",
+          "tags": ["alerts", "uptime"]
+        }
+      ]
+    },
+    {
+      "name": "Documentation",
+      "links": [
+        {
+          "title": "Onboarding guide",
+          "url": "https://example.com/onboarding",
+          "description": "Replace with your real onboarding docs.",
+          "tags": ["docs", "new starters"]
+        }
+      ]
+    }
+  ]
+}
