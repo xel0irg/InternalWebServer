@@ -11,15 +11,24 @@ The site is served at **http://hub.internal.rg**
 ## One-time setup: the hostname
 
 `hub.internal.rg` is not a public domain, so each machine that uses it needs a line in
-its Windows hosts file pointing the name at itself. Open PowerShell **as Administrator**
-(right-click → Run as administrator) and run:
+its Windows hosts file pointing the name at itself. That file is system-owned, so this
+is the one step that needs Administrator rights.
 
-```powershell
-Add-Content C:\Windows\System32\drivers\etc\hosts "`n127.0.0.1`thub.internal.rg"
-```
+1. Right-click the Start button and choose **Terminal (Admin)** (or **Windows PowerShell
+   (Admin)**), then approve the User Account Control prompt.
+2. In that window run:
 
-Check it worked with `ping hub.internal.rg`, which should answer from `127.0.0.1`.
-To undo it later, edit that file and delete the line.
+   ```powershell
+   cd C:\Users\nonon\Desktop\internal-web
+   powershell -ExecutionPolicy Bypass -File .\scripts\add-hosts-entry.ps1
+   ```
+
+The script backs up the hosts file, adds `127.0.0.1  hub.internal.rg`, flushes the DNS
+cache and confirms the name resolves. Running it twice is harmless.
+
+Check it yourself with `ping hub.internal.rg`, which should answer from `127.0.0.1`.
+To undo it, edit `C:\Windows\System32\drivers\etc\hosts` in an elevated Notepad and
+delete the line.
 
 ## Quick start (Windows PowerShell)
 
