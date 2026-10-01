@@ -6,6 +6,21 @@ Python + Flask and a plain HTML/CSS/JavaScript front end.
 Content comes from a single file, [`data/links.json`](data/links.json), so updating the
 page means editing JSON and refreshing the browser. No database, no restart.
 
+The site is served at **http://hub.internal.rg**
+
+## One-time setup: the hostname
+
+`hub.internal.rg` is not a public domain, so each machine that uses it needs a line in
+its Windows hosts file pointing the name at itself. Open PowerShell **as Administrator**
+(right-click → Run as administrator) and run:
+
+```powershell
+Add-Content C:\Windows\System32\drivers\etc\hosts "`n127.0.0.1`thub.internal.rg"
+```
+
+Check it worked with `ping hub.internal.rg`, which should answer from `127.0.0.1`.
+To undo it later, edit that file and delete the line.
+
 ## Quick start (Windows PowerShell)
 
 ```powershell
@@ -16,7 +31,17 @@ copy .env.example .env
 python app.py
 ```
 
-Then open http://127.0.0.1:8080
+Then open http://hub.internal.rg
+
+`Activate.ps1` must be run in each new terminal, before `python app.py`. It is what makes
+`python` mean the project's `.venv` copy, which has Flask installed. If activation is
+blocked by the execution policy, either run
+`Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` and **open a new terminal**, or skip
+activation entirely and run the virtual environment's Python directly:
+
+```powershell
+.\.venv\Scripts\python.exe app.py
+```
 
 ## Editing the page content
 
@@ -54,8 +79,11 @@ shows what is wrong instead of crashing.
 Copy `.env.example` to `.env` and adjust:
 
 - `HOST`: bind address (default `127.0.0.1`, reachable only from this machine)
-- `PORT`: port (default `8080`)
+- `PORT`: port (default `80`, so the URL needs no `:port` suffix)
 - `FLASK_DEBUG`: `1` for auto-reload and the debugger (never in production)
+
+If something else already uses port 80, set `PORT=8080` and browse to
+http://hub.internal.rg:8080
 
 To let others on the network reach the server, set `HOST=0.0.0.0`, turn `FLASK_DEBUG`
 off, and serve it behind a production server such as Waitress rather than Flask's
